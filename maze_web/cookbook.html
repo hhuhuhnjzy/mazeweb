@@ -142,10 +142,10 @@
                     console.error('❌ Error initializing modal:', error);
                 }
 
-                // Initialize typewriter animation
+                // Initialize typewriter animation (use same method as main page)
                 try {
-                    if (window.initTypewriter) {
-                        window.initTypewriter();
+                    if (window.initMainTypewriter) {
+                        window.initMainTypewriter();
                         console.log('✅ Typewriter initialized');
                     }
                 } catch (error) {

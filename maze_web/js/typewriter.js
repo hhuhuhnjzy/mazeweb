@@ -237,10 +237,21 @@ function initMainTypewriter() {
 function initTypewriter() {
     console.log('🎬 Initializing typewriter animation...');
     
+    // Prevent multiple initializations
+    if (globalTypewriter && globalTypewriter.typewriters[0] && globalTypewriter.typewriters[0].isActive) {
+        console.log('⚠️ Typewriter already active, skipping initialization');
+        return;
+    }
+    
     // Wait a bit to ensure the cookbook component is loaded
     setTimeout(() => {
         const element = document.getElementById('typewriter-code-0');
         if (element) {
+            // Check again if already initialized (in case of race condition)
+            if (globalTypewriter && globalTypewriter.typewriters[0]) {
+                console.log('⚠️ Typewriter already initialized, skipping');
+                return;
+            }
             globalTypewriter = new TypewriterAnimation();
             globalTypewriter.init(0, SIMPLE_WORKFLOW_CODE, 35);
             console.log('✅ Typewriter animation initialized');
@@ -294,14 +305,7 @@ function toggleCode(index) {
     }
 }
 
-// Auto-initialize when DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTypewriter);
-} else {
-    initTypewriter();
-}
-
-// Also expose for manual initialization
+// Expose for manual initialization (auto-init removed to prevent race conditions)
 window.initTypewriter = initTypewriter;
 window.initMainTypewriter = initMainTypewriter;
 window.replayTypewriter = replayTypewriter;
